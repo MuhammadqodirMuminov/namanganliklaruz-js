@@ -114,7 +114,7 @@
 										class="w-50 btn btn-danger">
 										Delete
 									</button>
-									<button class="w-50 btn btn-secondary">Edit</button>
+									<button id="editBtn" class="w-50 btn btn-secondary">Edit</button>
 								</div>
 							</div>
 						</div>
@@ -151,7 +151,84 @@
 						</div>
 					</div>
 				</div>
-				
+
+				<!-- edit modaal -->
+
+				<div style="display: none" class="editModal modal">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h1 class="modal-title fs-5" id="exampleModalLabel">
+									Edit post
+								</h1>
+								<button
+									id="closeEdit-btn"
+									type="button"
+									class="btn-close"></button>
+							</div>
+							<div class="modal-body">
+								<form class="editForm form-control mt-5 p-5">
+									<div class="mb-3">
+										<label for="title" class="form-label"
+											>Post Title</label
+										>
+										<input
+											type="text"
+											class="form-control"
+											id="edit-title"
+											aria-describedby="emailHelp"
+											required />
+										<div id="emailHelp" class="form-text">
+											Postni tahrirlangan holatda joylang !!
+										</div>
+									</div>
+									<div class="mb-3">
+										<label
+											for="exampleInputPassword1"
+											class="form-label"
+											>Post Subtitle</label
+										>
+										<input
+											type="text"
+											class="form-control"
+											id="edit-subtitle"
+											required />
+									</div>
+									<div class="mb-3">
+										<label
+											for="exampleInputPassword1"
+											class="form-label"
+											>Post Image</label
+										>
+										<input
+											type="text"
+											class="form-control"
+											id="edit-image"
+											required />
+									</div>
+									<div
+										id="edit-succes"
+										class="d-none bg-success border rounded-2 p-1 px-4 shadow-lg">
+										<h2 class="text-white mb-0">
+											Post muvaffaqqiyatli O'zgartitrildi !
+										</h2>
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button
+									id="close"
+									type="button"
+									class="btn btn-secondary">
+									Close
+								</button>
+								<button id="UpdateBtn" type="button" class="btn btn-primary">
+									Update
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</main>
 

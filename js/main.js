@@ -21,8 +21,9 @@ fetch("https://639b4a2a31877e43d6888973.mockapi.io/posts")
 		console.log(err);
 	});
 
-function renderTop(posts, parenttag = parentEL) {
+// render to top posts
 
+function renderTop(posts, parenttag = parentEL) {
 	posts.forEach((item) => {
 		if (!item.top) {
 			topPosts.push(item);
@@ -53,6 +54,8 @@ function renderTop(posts, parenttag = parentEL) {
 
 	parentEL.appendChild(fragment);
 }
+
+// render to body pposts
 
 function renderbody(posts, parenttag = handlerEl) {
 	parenttag.textContent = "";
@@ -90,3 +93,25 @@ function renderbody(posts, parenttag = handlerEl) {
 
 	handlerEl.appendChild(fragmentBody);
 }
+
+// exchange the rates currancy
+
+const dollor = findElement(".dollor"),
+	rubl = findElement(".rubl"),
+	eur = findElement(".eur");
+
+fetch("https://v6.exchangerate-api.com/v6/41b1afe74063ffb7cc3e2009/latest/USD")
+	.then((res) => res.json())
+	.then((data) => {
+		let UZS = +data.conversion_rates.UZS;
+		let RUB = +data.conversion_rates.RUB;
+		let EUR = +data.conversion_rates.EUR;
+
+		setTimeout(() => {
+			dollor.textContent = UZS.toFixed(2);
+			rubl.textContent = RUB.toFixed(2);
+			eur.textContent = EUR.toFixed(2);
+		}, 2000);
+	});
+
+

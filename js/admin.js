@@ -10,9 +10,18 @@ const elInputTitle = findElement("#title"),
 	elSuccess = findElement("#succes"),
 	elPostDel = findElement(".main"),
 	elmodal = findElement(".modal"),
+	editClosebtn = findElement("#closeEdit-btn"),
+	elEditModal = findElement(".editModal"),
 	closebtn = findElement("#close-btn"),
 	closeModal = findElement("#close"),
-	elBtn = findElement("#btn");
+	elBtn = findElement("#btn"),
+	elModalEdit = findElement("#UpdateBtn");
+
+// variables edit
+
+const modalInputTitle = findElement("#edit-title"),
+	modalInputSubtitle = findElement("#edit-subtitle"),
+	elmodalImg = findElement("#edit-image");
 
 const templateAdmin = findElement("#admin-template"),
 	mainAdmin = findElement(".main"),
@@ -52,7 +61,7 @@ elForm.addEventListener("submit", (evt) => {
 
 	elSuccess.classList.remove("d-none");
 	setTimeout(() => {
-		setInterval(() => {
+		setTimeout(() => {
 			elSuccess.classList.add("d-none");
 			elSuccess.style.transition = "all 0.6s ease-out ";
 			elForm.reset();
@@ -83,6 +92,7 @@ function renderAdmin(posts, parenttag = mainAdmin) {
 			date = templateAdminPost.querySelector("#date-body"),
 			isTop = templateAdminPost.querySelector("#isTop"),
 			delbtn = templateAdminPost.querySelector("#delete"),
+			editBtn = templateAdminPost.querySelector("#editBtn"),
 			dateNow = {
 				hour:
 					new Date().getHours() < 10
@@ -103,6 +113,7 @@ function renderAdmin(posts, parenttag = mainAdmin) {
 		subtitle.innerHTML = post.subtitle;
 		isTop.textContent = `Is top post :  ${post.top}`;
 		delbtn.dataset.id = post.id;
+		editBtn.dataset.id = post.id;
 
 		fragmentAdmin.append(templateAdminPost);
 	});
@@ -112,8 +123,8 @@ function renderAdmin(posts, parenttag = mainAdmin) {
 // deleting a post
 
 elPostDel.addEventListener("click", (e) => {
+	const id = +e.target.dataset.id;
 	if (e.target.matches("#delete")) {
-		const id = e.target.dataset.id;
 		modalActive();
 
 		elBtn.addEventListener("click", () => {
@@ -133,10 +144,51 @@ elPostDel.addEventListener("click", (e) => {
 		closeModal.addEventListener("click", () => {
 			modalRemove();
 		});
+	} else if (e.target.matches("#editBtn")) {
+		fetch(`https://639b4a2a31877e43d6888973.mockapi.io/posts/${id}`)
+			.then((data) => data.json())
+			.then((data) => {
+				const editTitle = modalInputTitle;
+				const editSubtitle = modalInputSubtitle;
+				const editImage = elmodalImg;
+
+				editTitle.value = data.name;
+				editSubtitle.value = data.subtitle;
+				editImage.value = data.image;
+
+				elModalEdit.addEventListener("click", () => {
+					const post = {
+						name: editTitle.value,
+						subtitle: editSubtitle.value,
+						image: editImage.value,
+					};
+					fetch(
+						`https://639b4a2a31877e43d6888973.mockapi.io/posts/${id}`,
+						{
+							method: "put",
+							body: JSON.stringify(post),
+							headers: {
+								"Content-type": "application/json; charset=UTF-8",
+							},
+						}
+					)
+						.then((res) => res.json())
+						.then((data) => {
+							location.reload();
+						});
+					modalEditRemove();
+				});
+				editClosebtn.addEventListener("click", () => {
+					modalEditRemove();
+				});
+			})
+			.catch((err) => console.log(err));
+
+		modalEditShow();
 	}
 });
 
-// modal section
+// modal sectionGET
 
 function modalActive() {
 	elmodal.style.display = "block";
@@ -145,5 +197,15 @@ function modalActive() {
 
 function modalRemove() {
 	elmodal.style.display = "none";
+	document.body.style.overflow = "auto";
+}
+
+function modalEditShow() {
+	elEditModal.style.display = "block";
+	document.body.style.overflow = "hidden";
+}
+
+function modalEditRemove() {
+	elEditModal.style.display = "none";
 	document.body.style.overflow = "auto";
 }
